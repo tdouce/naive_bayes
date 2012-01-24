@@ -1,15 +1,5 @@
 NaiveBayes::Application.routes.draw do
-  get "individuals/show"
-
-  get "individuals/index"
-
-  get "individuals/new"
-
-  get "individuals/update"
-
-  get "individuals/edit"
-
-  get "individuals/delete"
+  resources :individuals
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
