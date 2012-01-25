@@ -1,6 +1,4 @@
 class IndividualsController < ApplicationController
-  def show
-  end
 
   def index
     @individuals = Individual.order("gender desc")
