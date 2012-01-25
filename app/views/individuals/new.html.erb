@@ -1,12 +1,2 @@
-<h1>Add error messages</h1>
 
-<%= form_for @individual do |f| %>
-  <%= f.label       "Gender" %>
-  <%= f.collection_select :gender, Individual::GENDERS, :to_s, :titleize %> <br />
-  <%= f.label       "Weight" %>
-  <%= f.text_field  :weight %>  <br />
-  <%= f.label       "Height" %>
-  <%= f.text_field  :height %>  <br />
-
-  <%= f.submit %>
-<% end %>
+<%= render 'form' %> 
