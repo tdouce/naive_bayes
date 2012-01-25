@@ -11,9 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120124015754) do
+ActiveRecord::Schema.define(:version => 20120125024751) do
 
   create_table "individuals", :force => true do |t|
+    t.string   "gender"
+    t.float    "weight"
+    t.float    "height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "samples", :force => true do |t|
     t.string   "gender"
     t.float    "weight"
     t.float    "height"

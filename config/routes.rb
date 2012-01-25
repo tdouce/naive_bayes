@@ -1,4 +1,8 @@
 NaiveBayes::Application.routes.draw do
+  get "samples/create"
+
+  get "samples/new"
+
   resources :individuals
 
   # The priority is based upon order of creation:
