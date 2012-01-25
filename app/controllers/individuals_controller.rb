@@ -15,8 +15,6 @@ class IndividualsController < ApplicationController
 
     if @individual.save
       flash[:success] = "Individual was created!"
-
-      # Redirect to employee index
       redirect_to individuals_url
     else
       flash[:failure] = "Individual was NOT created!"
@@ -24,13 +22,26 @@ class IndividualsController < ApplicationController
     end
   end
 
-  def update
-  end
-
   def edit
+    @individual = Individual.find(params[:id])
   end
 
-  def delete
+  def update
+    @individual = Individual.find(params[:id])
+
+    if @individual.update_attributes(params[:individual])
+      flash[:success] = "Individual was updated"
+      redirect_to individuals_url
+    else
+      flash[:failure] = "Individual was NOT updated"
+      render 'edit'
+    end
+  end
+
+  def destroy
+    Individual.find(params[:id]).destroy
+    flash[:success] = "Individual was deleted"
+    redirect_to individuals_url
   end
 
 end
