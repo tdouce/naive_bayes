@@ -2,12 +2,15 @@
   
   <%= render 'shared/errormessages', :object => f.object %>
 
-  <%= f.label       "Gender" %>
-  <%= f.collection_select :gender, Individual::GENDERS, :to_s, :titleize %> <br />
-  <%= f.label       "Weight" %>
-  <%= f.text_field  :weight %>  <br />
-  <%= f.label       "Height" %>
-  <%= f.text_field  :height %>  <br />
+  <div>
+    <%= f.label       "Gender" %>
+    <%= f.collection_select :gender, Individual::GENDERS, :to_s, :titleize %> <br />
+    <%= f.label       "Weight" %>
+    <%= f.text_field  :weight %>  <br />
+    <%= f.label       "Height" %>
+    <%= f.text_field  :height %>  <br />
+  </div>
 
   <%= f.submit %>
 <% end %>
+
