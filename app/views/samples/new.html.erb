@@ -1,2 +1,13 @@
-<h1>Samples#new</h1>
-<p>Find me in app/views/samples/new.html.erb</p>
+<h1>Enter a sample</h1>
+<%= form_for @sample do |f| %>
+  
+  <div>
+    <%= f.label       "Weight" %>
+    <%= f.text_field  :weight %>  <br />
+    <%= f.label       "Height" %>
+    <%= f.text_field  :height %>  <br />
+  </div>
+
+  <%= f.submit "Test Sample" %>
+<% end %>
+
