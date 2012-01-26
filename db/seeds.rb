@@ -8,12 +8,12 @@
 
     individuals = Individual.create(
                                     [ 
-                                      { gender: 'male',   height: 6,    weight: 180  },
-                                      { gender: 'male',   height: 5.92, weight: 190  },
-                                      { gender: 'male',   height: 5.58, weight: 170  },
-                                      { gender: 'male',   height: 5.92, weight: 165  },
-                                      { gender: 'female', height: 5,    weight: 100  },
-                                      { gender: 'female', height: 5.5,  weight: 150  },
-                                      { gender: 'female', height: 5.42, weight: 130  },
-                                      { gender: 'female', height: 5.75, weight: 150  },
+                                      { gender: 'male',   height: 6,    weight: 180, foot_size: 12 },
+                                      { gender: 'male',   height: 5.92, weight: 190, foot_size: 11 },
+                                      { gender: 'male',   height: 5.58, weight: 170, foot_size: 12 },
+                                      { gender: 'male',   height: 5.92, weight: 165, foot_size: 10 },
+                                      { gender: 'female', height: 5,    weight: 100, foot_size: 6 },
+                                      { gender: 'female', height: 5.5,  weight: 150, foot_size: 8 },
+                                      { gender: 'female', height: 5.42, weight: 130, foot_size: 7 },
+                                      { gender: 'female', height: 5.75, weight: 150, foot_size: 9},
                                     ])
