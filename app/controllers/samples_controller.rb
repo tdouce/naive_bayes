@@ -1,7 +1,7 @@
 class SamplesController < ApplicationController
   
   # Add when doing ajax
-  respond_to :html, :js
+  #respond_to :html, :js
 
   def new
     @sample = Sample.new
