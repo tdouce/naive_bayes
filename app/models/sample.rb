@@ -2,6 +2,6 @@ class Sample < ActiveRecord::Base
 
   # Remove
   def test
-    'is ajax working?'
+    'Yes, it is!'
   end
 end

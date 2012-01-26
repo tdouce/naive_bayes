@@ -1,5 +1,5 @@
 <h1>Enter a sample</h1>
-<%= form_for @sample do |f| %>
+<%= form_for @sample, :remote => true do |f| %>
   
   <div>
     <%= f.label       "Weight" %>
@@ -11,5 +11,6 @@
   <%= f.submit "Test Sample" %>
 <% end %>
 
+<h2>Result:</h2>
 <%= render 'result' %>
 

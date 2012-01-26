@@ -1,7 +1,7 @@
 class SamplesController < ApplicationController
   
   # Add when doing ajax
-  #respond_to :html, :js
+  respond_to :html, :js
 
   def new
     @sample = Sample.new
@@ -13,7 +13,10 @@ class SamplesController < ApplicationController
     if @sample.save
       # Add when doing ajax
       #respond_with(@sample)
-      redirect_to new_sample_url 
+      respond_to do |format|
+        format.html { redirect_to new_sample_url }
+        format.js
+      end
     else
       render :action => 'new'
     end
