@@ -9,23 +9,17 @@
 //= require_tree .
 $(function(){
 
-  //var execesive_weight_check = $('#individual_weight').val()
 
-  //$('#new_individual').submit(function() {
-  //  alert( 'Are you sure ' + execesive_weight_check + ' is correct?' );
-  //  if (confirm("Really delete this article?")) 
-  //    {
-  //      return true;
-  //    } 
-  //    else 
-  //      {
-  //        return false;
-  //      } 
-  //  //if ( execesive_weight_check > 400 )
-  //  //  {
-  //  //    alert( 'Are you sure ' + execesive_weight_check + ' is correct?' );
-  //  //  };
-  //  return false;
-  //});
+  $('#new_sample').submit(function(){
+    if ( $('#sample_weight').val() > 400 || $('#sample_height').val() > 7 || $('#sample_foot_size').val() > 15 )
+      {
+        var confirm_popup = confirm("Are you sure none of your numbers of too big? 'Cancel' to change number 'OK' to continue")
+        if ( confirm_popup != true )
+          return false
+      };
+  });
 
-});
+
+
+
+ });
