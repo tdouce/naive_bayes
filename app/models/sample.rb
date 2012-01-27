@@ -11,19 +11,22 @@ class Sample < ActiveRecord::Base
 
   def test
 
-    #males   = Individual.males.map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
-    #females = Individual.males.map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
+    #males   = Individual.get_gender(Individual::MALE).map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
+    #females = Individual.get_gender(Individual::FEMALE).map {|female| [ female.weight, female.height, female.foot_size ]}.transpose
 
-    males   = Individual.get_gender(Individual::MALE).map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
-    females = Individual.get_gender(Individual::FEMALE).map {|female| [ female.weight, female.height, female.foot_size ]}.transpose
+    attributes = [ :weight, :height, :foot_size ]
 
-    training_data = {}
+    data = prepare_data( attributes )
 
-    # See if there is a way to dynamically build this list based on the number of items in the
-    # form or possibly the number of columns (minus id, created_at, etc) that are in the database table
-    training_data[ Individual::MALE ]   = males 
-    training_data[ Individual::FEMALE ] = females 
+    puts '*'*80
+    #print male
+    #puts '&&&&'
+    #print female
+    #puts training_data
+    puts data 
+    puts '*'*80
 
+    # Use module to generate real result
     #a = GenderDecider.new()
     #a.train( training_data )
     #a.get_posteriors( sample, Individual::MALEPROB, Individual::FEMALEPROB )
@@ -32,8 +35,24 @@ class Sample < ActiveRecord::Base
     # Testing response for AJAX
     'Yes, it is!'
 
-    #test = blah('is this working')
-    #test.to_s
-
   end
+
+  private
+
+  # Querys database for each gender according to the attributes and packages it up so 
+  # that it can be sent to NaiveBayes classifer
+  def prepare_data( attributes )
+
+    training_data = Individual::GENDERS.inject({}) do |hash,gender| 
+      data = []
+      attributes.each do |attr|
+          data << Individual.gender( gender ).map( &attr )
+      end
+      hash[ gender ] = data
+      hash
+    end
+
+    return training_data 
+
+    end
 end
