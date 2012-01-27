@@ -4,6 +4,7 @@
     <th> Gender </th>
     <th> Height </th>
     <th> Weight </th>
+    <th> Foot Size</th>
     <th></th>
     <th></th>
   </tr>
@@ -12,6 +13,7 @@
       <td> <%= indiv.gender %> </td>
       <td> <%= indiv.weight %> </td>
       <td> <%= indiv.height %> </td>
+      <td> <%= indiv.foot_size %> </td>
       <td> <%= button_to "edit", edit_individual_url( indiv ), { :method => :get }   %> </td>
       <td> <%= button_to "delete", individual_url( indiv ), :method => :delete, 
                :title => "Delete individual"%> </td>
