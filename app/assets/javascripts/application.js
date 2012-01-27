@@ -13,7 +13,7 @@ $(function(){
   $('#new_sample').submit(function(){
     if ( $('#sample_weight').val() > 400 || $('#sample_height').val() > 7 || $('#sample_foot_size').val() > 15 )
       {
-        var confirm_popup = confirm("Are you sure none of your numbers of too big? 'Cancel' to change number 'OK' to continue")
+        var confirm_popup = confirm("Some of numbers are really large? 'Cancel' to edit your numbers and 'OK' to continue with submission.")
         if ( confirm_popup != true )
           return false
       };
