@@ -7,10 +7,10 @@ module NaiveBayes
         def train( training_data )
 
             # Get arrays containing means and variances
-            @male_means, @male_variances = batch_train( training_data[ Individual::MALETEXT ] )
+            @male_means, @male_variances = batch_train( training_data[ Individual::MALE ] )
 
             # Get arrays containing means and variances
-            @female_means, @female_variances = batch_train( training_data[ Individual::FEMALETEXT ] )
+            @female_means, @female_variances = batch_train( training_data[ Individual::FEMALE ] )
         end
 
         # Generate posterior for male and female
