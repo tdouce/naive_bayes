@@ -1,6 +1,10 @@
 
 module NaiveBayes 
 
+  def blah(text)
+    text
+  end
+
     class GenderDecider
 
         # Train data, get posterior for male and female, and compare results to determine gender 
