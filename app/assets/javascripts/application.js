@@ -6,10 +6,17 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require underscore-min.js
 //= require_tree .
 $(function(){
 
-   var check_ids = ['sample_weight','sample_height','sample_foot_size']
+   var check_ids = [
+                    [ 'sample_weight',   50, 300 ],
+                    [ 'sample_height',   4,  7 ],
+                    ['sample_foot_size', 4,  14 ]
+                   ]
+
+   _.each([1, 2, 3], function(num){ alert(num); });
 
    // for(var i in arr) {
    //   var value = arr[i];
