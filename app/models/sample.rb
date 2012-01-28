@@ -7,13 +7,23 @@ class Sample < ActiveRecord::Base
   validates :height,    :presence => true, :numericality => true
   validates :foot_size, :presence => true, :numericality => true
 
-  def test( sample_data )
+  FORMATTRIBUTES = [ :weight, :height, :foot_size ]
+
+  def prepare_sample
+    sample_result = FORMATTRIBUTES.inject([]) do |result,attr|
+      result << self.send(attr)
+      result
+    end
+  end
+
+  def run_sample( sample_data )
 
     #males   = Individual.get_gender(Individual::MALE).map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
     #females = Individual.get_gender(Individual::FEMALE).map {|female| [ female.weight, female.height, female.foot_size ]}.transpose
+    #
+    #attributes = [ :weight, :height, :foot_size ]
 
-    attributes = [ :weight, :height, :foot_size ]
-    train( prepare_data( attributes ) )
+    train( prepare_data( FORMATTRIBUTES ) )
     get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB )
     classify( Individual::MALE, Individual::FEMALE )
   end
