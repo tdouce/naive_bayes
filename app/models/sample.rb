@@ -1,49 +1,33 @@
+
+#require naive_bayes_classifier
+#include NaiveBayesClassifier 
+#require NaiveBayesClassifier 
+
 class Sample < ActiveRecord::Base
 
   # Determine gender of a sample by using the Naive Bayes Classifier
-  #include NaiveBayesClassifier 
 
   validates :weight,    :presence => true, :numericality => true
   validates :height,    :presence => true, :numericality => true
   validates :foot_size, :presence => true, :numericality => true
 
+  # Attributes that we are included in naive bayes classier
   FORMATTRIBUTES = [ :weight, :height, :foot_size ]
 
+  # Packages up data for a sumbited sample
   def prepare_sample
-    #sample_result = FORMATTRIBUTES.inject([]) do |result,attr|
-    #  result << self.send(attr)
-    #  result
-    #end
-
     sample_result = FORMATTRIBUTES.inject([]) { |result,attr| result << self.send( attr ) }
-
   end
 
   def run_sample( sample_data )
 
     #males   = Individual.get_gender(Individual::MALE).map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
     #females = Individual.get_gender(Individual::FEMALE).map {|female| [ female.weight, female.height, female.foot_size ]}.transpose
-    #
-    #attributes = [ :weight, :height, :foot_size ]
 
     train( prepare_data( FORMATTRIBUTES ) )
     get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB )
     classify( Individual::MALE, Individual::FEMALE )
   end
-
-  # Dynamically get attributes from current sample
-  #def self.prepare_sample(sample)
-  #  puts '*'*80
-  #  puts 'testing bitches'
-
-  #  #sample = []
-  #  #attributes.each do |attr|
-  #  # sample << self.map( &attr )
-  #  #end
-
-  #  #puts sample 
-  #  puts '*'*80
-  #end
 
   private
 
@@ -81,7 +65,7 @@ class Sample < ActiveRecord::Base
           return means, variances
       end
 
-      ##Train data, get posterior for male and female, and compare results to determine gender 
+      #Train data, get posterior for male and female, and compare results to determine gender 
       def train( training_data )
 
           # Get arrays containing means and variances

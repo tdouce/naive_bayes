@@ -1,8 +1,9 @@
 NaiveBayes::Application.routes.draw do
-  resources :individuals
 
-  # Don't think I need full resources
-  resources :samples
+  resources :individuals, :path => 'training_data'
+  resources :samples, :only => [:create, :new]
+
+  root :to => "samples#new"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
