@@ -9,6 +9,12 @@
 //= require_tree .
 $(function(){
 
+   var check_ids = ['sample_weight','sample_height','sample_foot_size']
+
+   // for(var i in arr) {
+   //   var value = arr[i];
+   //   alert(i =") "+ value);
+   // }
 
   $('#new_sample').submit(function(){
     if ( $('#sample_weight').val() > 400 || $('#sample_height').val() > 7 || $('#sample_foot_size').val() > 15 )
