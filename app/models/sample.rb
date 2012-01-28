@@ -34,6 +34,8 @@ class Sample < ActiveRecord::Base
 
     # Testing response for AJAX
     'Yes, it is!'
+    @test = blah()
+    @test
 
   end
 
