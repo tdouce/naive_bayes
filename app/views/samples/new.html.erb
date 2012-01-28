@@ -10,8 +10,14 @@
     <%= f.text_field  :foot_size %>  <br />
   </div>
 
-  <%= f.submit "Test Sample" %>
+  <%= f.submit "Test Sample", :id => 'submit_sample' %>
+
+  <%= button_tag(:type => 'button', :id => 'clear_button') do %>
+    <%= label_tag('Clear') %>
+  <% end %>
+
 <% end %>
+
 
 <h2>Result:</h2>
 <%= render 'result' %>
