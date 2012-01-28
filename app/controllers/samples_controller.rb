@@ -9,6 +9,8 @@ class SamplesController < ApplicationController
 
   def create
     @sample = Sample.new(params[:sample])
+    #@test_data = Sample.prepare_sample(@sample) 
+    @test_data = [130,6,8] 
 
     if @sample.save
       # Add when doing ajax

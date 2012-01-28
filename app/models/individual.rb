@@ -12,8 +12,8 @@ class Individual < ActiveRecord::Base
   #scope :females, Individual.where(:gender => Individual::FEMALE)
 
   # Get all individuals according to a specific gender
-  def self.gender(gender)
-    Individual.where(:gender => gender )
+  def self.gender( gender )
+    Individual.where( :gender => gender )
   end
 
   #def self.get_attributes_per_gender( per_gender, attributes )
@@ -24,7 +24,5 @@ class Individual < ActiveRecord::Base
   MALEPROB   = 0.5
   FEMALEPROB = 0.5
 
-  GENDERS = [MALE, FEMALE]
-
-
+  GENDERS = [ MALE, FEMALE ]
 end
