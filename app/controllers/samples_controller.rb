@@ -11,8 +11,6 @@ class SamplesController < ApplicationController
     @sample = Sample.new(params[:sample])
     @sample_data = @sample.prepare_sample 
 
-    #debugger
-
     if @sample.save
       # Add when doing ajax
       #respond_with(@sample)

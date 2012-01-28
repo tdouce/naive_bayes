@@ -10,10 +10,13 @@ class Sample < ActiveRecord::Base
   FORMATTRIBUTES = [ :weight, :height, :foot_size ]
 
   def prepare_sample
-    sample_result = FORMATTRIBUTES.inject([]) do |result,attr|
-      result << self.send(attr)
-      result
-    end
+    #sample_result = FORMATTRIBUTES.inject([]) do |result,attr|
+    #  result << self.send(attr)
+    #  result
+    #end
+
+    sample_result = FORMATTRIBUTES.inject([]) { |result,attr| result << self.send( attr ) }
+
   end
 
   def run_sample( sample_data )
