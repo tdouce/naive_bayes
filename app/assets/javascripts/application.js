@@ -11,14 +11,24 @@
 
 $(function(){
 
+  var weight_min    = 50;
+  var weight_max    = 300;
+  var height_min    = 4;
+  var height_max    = 7;
+  var foot_size_min = 4;
+  var foot_size_max = 14;
+
    // ids and reasonable minumum and maxium values.  These will be used to check
    // the input values on form submission to make sure that a user did not
    // accidently type in an 'extreme' value.
    var check_ids = [
-                    [ 'sample_weight',    50, 300 ],
-                    [ 'sample_height',    4,  7 ],
-                    [ 'sample_foot_size', 4,  14 ]
-                   ]
+                    [ 'sample_weight',        weight_min, weight_max],
+                    [ 'sample_height',        height_min,  height_max ],
+                    [ 'sample_foot_size',     foot_size_min,  foot_size_max  ],
+                    [ 'individual_weight',    weight_min, weight_max ],
+                    [ 'individual_height',    height_min,  height_max ],
+                    [ 'individual_foot_size', foot_size_min,  foot_size_max  ]
+                   ];
 
   // On click make the value for each input '', remove any previous result, and
   // remove any classes they may exist from previous submissions

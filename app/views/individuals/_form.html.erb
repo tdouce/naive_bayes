@@ -5,12 +5,15 @@
   <div>
     <%= f.label       "Gender" %>
     <%= f.collection_select :gender, Individual::GENDERS, :to_s, :titleize %> <br />
-    <%= f.label       "Weight" %>
+    <%= f.label       "Weight:" %>
     <%= f.text_field  :weight %>  <br />
-    <%= f.label       "Height" %>
+    <%= f.label       "Height:" %>
     <%= f.text_field  :height %>  <br />
+    <%= f.label       "Foot Size:" %>
+    <%= f.text_field  :foot_size %>  <br />
   </div>
 
-  <%= f.submit %>
+
+  <%= f.submit button_text, :id => 'submit_sample' %>
 <% end %>
 
