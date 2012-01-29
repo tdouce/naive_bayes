@@ -79,7 +79,7 @@ $(function(){
     // If any of the input values were 'extreme', then present a confirm box
     if ( warning == true ){
 
-      var confirm_popup = confirm("Some numbers seem extreme. Are you sure they are correct? 'Cancel' to edit your numbers and 'OK' to continue with submission.");
+      var confirm_popup = confirm("Are you sure the values are correct? 'Cancel' to edit and 'OK' to continue with submission.");
 
       // If the user wants to edit the values then stop form submission
       if ( confirm_popup == false )
