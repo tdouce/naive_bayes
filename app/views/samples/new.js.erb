@@ -1,0 +1,22 @@
+// Display any validations errors if any
+<% if @sample.errors.any? %>
+  // Remove any previous validation errors
+  $('.error_explination').remove();
+
+  // Div that will hold all validation errors
+  var html_errors_div = $('<div></div>').addClass('error_explination');
+
+  // ul that will hold validations errors
+  var html_errors = $('<ul>')
+
+  // Put all validation errors in unodered list
+  <% @sample.errors.full_messages.each do |error| %>
+    html_errors.append('<li> <%= j( error ) %></li>')
+  <% end %>
+
+  // Put validations errors in div
+  $( html_errors_div ).html( html_errors );  
+
+  // Insert div into html before form
+  $("#new_sample").before( html_errors_div );
+<% end %>
