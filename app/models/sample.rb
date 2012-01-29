@@ -24,9 +24,15 @@ class Sample < ActiveRecord::Base
     #males   = Individual.get_gender(Individual::MALE).map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
     #females = Individual.get_gender(Individual::FEMALE).map {|female| [ female.weight, female.height, female.foot_size ]}.transpose
 
-    train( prepare_data( FORMATTRIBUTES ) )
-    get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB )
-    classify( Individual::MALE, Individual::FEMALE )
+    # Run sample only if there is training data
+    if Individual.all.size > 1 
+      train( prepare_data( FORMATTRIBUTES ) )
+      get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB )
+      classify( Individual::MALE, Individual::FEMALE )
+    else
+      'There is no training data'
+    end
+
   end
 
   private
