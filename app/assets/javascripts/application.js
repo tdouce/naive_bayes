@@ -30,21 +30,28 @@ $(function(){
                     [ 'individual_foot_size', foot_size_min,  foot_size_max  ]
                    ];
 
-  // On click make the value for each input '', remove any previous result, and
-  // remove any classes they may exist from previous submissions
-  $("#clear_button").click(function(){
-
+  function remove_warnings(){
+  
     // Remove any errors that might exist
     $('.error_explination').remove();
-
-    // Clear all values
-    _.each( check_ids, function( id ){ $('#' + id).val(''); });
 
     // Clearn any previous ajax response
     $('#response').html('<p></p>');
 
     // Clear any previous extreme number warnings
     $('*').removeClass('extreme_number');
+  };
+
+  // On click make the value for each input '', remove any previous result, and
+  // remove any classes they may exist from previous submissions
+  $("#clear_button").click(function(){
+
+    // Remove any previous validations or warnings
+    remove_warnings();
+
+    // Clear all values
+    _.each( check_ids, function( id ){ $('#' + id).val(''); });
+
   });
 
   // On form submission check to see if any of the input values are extreme
@@ -52,14 +59,8 @@ $(function(){
   // then highlit those input fields and prompt a confirm box.
   $('#submit_sample').click(function(event){
 
-    // Remove any errors that might exist
-    $('.error_explination').remove();
-
-    // Remove any previous result
-    $('#response').html('<p></p>');
-
-    // Remove any previous warning
-    $('*').removeClass('extreme_number');
+    // Remove any previous validations or warnings
+    remove_warnings();
 
     // Value used to see if the confirm alert should be presented
     var warning = false;
