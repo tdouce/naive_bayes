@@ -1,9 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  male_posterior: 1.5
-  female_posterior: 1.5
+  stats: MyText
 
 two:
-  male_posterior: 1.5
-  female_posterior: 1.5
+  stats: MyText

@@ -25,13 +25,14 @@ class Sample < ActiveRecord::Base
 
   # Run the sample from the sample#new.html.erb. If there is no training data
   # then do not run and instead return text notifing user. If there is data and
-  # at least one individual has :trained => false, then calculate the posteriors
-  # for each class( male and female). Save posterior to database and set all
+  # at least one individual has :trained => false, then train the data and
+  # calcuate the posteriors for each class( male and female). Save means and 
+  # variances for each gender to database and set all
   # invidividuals :trained => true. If the individuals size is greater than one
   # and all individuals :trained => true, then we know that no individuals have
-  # been added to training data so we can use the last posterior that was saved
-  # in the database.  This saves us from having to calculate the posterior each
-  # time a request is made, thus calculating the posterior only when neccessary. 
+  # been added to training data so we can use the last male and female means and
+  # variances in the database.  This saves us from having to calculate to train
+  # the data for each request, and only training the data when neccessary. 
   def run_sample( sample_data )
 
     # Run sample only if there is training data
@@ -53,16 +54,19 @@ class Sample < ActiveRecord::Base
 
         # Saves posterior results to database
         # Does this belong in controller?
-        # Posterior.set_posterior( means_variances )
+        Posterior.set_posterior( means_variances )
         
         result
 
       # All individuals trained status is true, we can get the gender from the
       # last Posterior that was saved
       else
-        #probability = Posterior.last
-        #result = probability.gender
-        'get from posterior table'
+
+        means_variances = Posterior.last.stats
+        
+        male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
+        result = classify( Individual::MALE, Individual::FEMALE, male_posterior_result, female_posterior_result )
+
       end
 
     # If there is not training data, then tell user so and do not run
