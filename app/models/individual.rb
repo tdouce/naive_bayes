@@ -7,6 +7,8 @@ class Individual < ActiveRecord::Base
   MALE    = 'Male'
   FEMALE  = 'Female'
 
+  # user
+  # scope :untrained, where( :trained => false )
   scope :trained?, Individual.where( :trained => false )
 
   # Get all individuals according to a specific gender

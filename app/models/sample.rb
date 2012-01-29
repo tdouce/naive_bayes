@@ -38,9 +38,10 @@ class Sample < ActiveRecord::Base
     # Run sample only if there is training data
     if Individual.all.size > 1 
 
+      # not_trained_individuals = Individual.untrained
       not_trained_individuals = Individual.trained?
 
-      # If there are individuals with :trained => false
+      # User not_trained.count == 0 instead
       if not_trained_individuals.size > 0
 
         prepped_data = prepare_data( FORMATTRIBUTES )
@@ -50,10 +51,12 @@ class Sample < ActiveRecord::Base
 
         # Sets all individuals with :trained => false to true
         # Does this belong in controller?
+        # Update all method
         Individual.to_trained( not_trained_individuals )
 
         # Saves posterior results to database
         # Does this belong in controller?
+        # Call directly
         Posterior.set_posterior( means_variances )
         
         result
