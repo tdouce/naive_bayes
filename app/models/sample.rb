@@ -57,15 +57,28 @@ class Sample < ActiveRecord::Base
         # Saves posterior results to database
         # Does this belong in controller?
         # Call directly
-        Posterior.set_posterior( means_variances )
-        
+        #Posterior.set_posterior( means_variances )
+        a = Posterior.new
+        a.set_poor_man_memcache( means_variances )
+        #puts '*'*80
+        #puts a.poor_man_memcache
+        #puts '*'*80
+
+        #post = Posterior.new
+        #debugger
         result
 
       # All individuals trained status is true, we can get the gender from the
       # last Posterior that was saved
       else
 
-        means_variances = Posterior.last.stats
+        b = Posterior.new
+        means_variances = b.get_poor_man_memcache
+
+        #means_variances = Posterior.last.stats
+        #means_variances = post.poor_man_memcache
+
+        debugger
         
         male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior_result, female_posterior_result )
