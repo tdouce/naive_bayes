@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120126214555) do
+ActiveRecord::Schema.define(:version => 20120129164554) do
 
   create_table "individuals", :force => true do |t|
     t.string   "gender"
@@ -20,6 +20,15 @@ ActiveRecord::Schema.define(:version => 20120126214555) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "foot_size"
+    t.boolean  "trained"
+  end
+
+  create_table "posteriors", :force => true do |t|
+    t.float    "male_posterior"
+    t.float    "female_posterior"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "gender"
   end
 
   create_table "samples", :force => true do |t|

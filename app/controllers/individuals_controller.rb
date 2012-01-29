@@ -10,6 +10,7 @@ class IndividualsController < ApplicationController
 
   def create
     @individual = Individual.new(params[:individual])
+    @individual.set_trained_status_false
 
     if @individual.save
       flash[:success] = "Individual was created!"
@@ -26,6 +27,7 @@ class IndividualsController < ApplicationController
 
   def update
     @individual = Individual.find(params[:id])
+    @individual.set_trained_status_false
 
     if @individual.update_attributes(params[:individual])
       flash[:success] = "Individual was updated"

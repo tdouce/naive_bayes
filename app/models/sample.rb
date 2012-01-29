@@ -19,16 +19,52 @@ class Sample < ActiveRecord::Base
     sample_result = FORMATTRIBUTES.inject([]) { |result,attr| result << self.send( attr ) }
   end
 
-  def run_sample( sample_data )
+  def set_trained_status
+    self.update_attributes( :trained => false )
+  end
 
-    #males   = Individual.get_gender(Individual::MALE).map {|male| [ male.weight, male.height, male.foot_size ]}.transpose
-    #females = Individual.get_gender(Individual::FEMALE).map {|female| [ female.weight, female.height, female.foot_size ]}.transpose
+  # Run the sample from the sample#new.html.erb. If there is no training data
+  # then do not run and instead return text notifing user. If there is data and
+  # at least one individual has :trained => false, then calculate the posteriors
+  # for each class( male and female). Save posterior to database and set all
+  # invidividuals :trained => true. If the individuals size is greater than one
+  # and all individuals :trained => true, then we know that no individuals have
+  # been added to training data so we can use the last posterior that was saved
+  # in the database.  This saves us from having to calculate the posterior each
+  # time a request is made, thus calculating the posterior only when neccessary. 
+  def run_sample( sample_data )
 
     # Run sample only if there is training data
     if Individual.all.size > 1 
-      train( prepare_data( FORMATTRIBUTES ) )
-      get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB )
-      classify( Individual::MALE, Individual::FEMALE )
+
+      not_trained_individuals = Individual.trained?
+
+      # If there are individuals with :trained => false
+      if not_trained_individuals.size > 0
+
+        train( prepare_data( FORMATTRIBUTES ) )
+        male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB )
+        result = classify( Individual::MALE, Individual::FEMALE, male_posterior_result, female_posterior_result )
+
+        # Sets all individuals with :trained => false to true
+        # Does this belong in controller?
+        Individual.to_trained( not_trained_individuals )
+
+        # Saves posterior results to database
+        # Does this belong in controller?
+        Posterior.set_posterior( male_posterior_result, female_posterior_result, result )
+        
+        result
+
+      # All individuals trained status is true, we can get the gender from the
+      # last Posterior that was saved
+      else
+        probability = Posterior.last
+        result = probability.gender
+      end
+
+    # If there is not training data, then tell user so and do not run
+    # a calculation
     else
       'There is no training data'
     end
@@ -108,6 +144,8 @@ class Sample < ActiveRecord::Base
 
           # Get posterior for female classification
           @female_posterior_numerator = get_posterior_for_gender( female_probability, @female_variances, @female_means, sample )
+
+          return @male_posterior_numerator, @female_posterior_numerator
       end
 
       # Generates probability for each combination (i.e. p(height|male), etc )
@@ -118,8 +156,8 @@ class Sample < ActiveRecord::Base
       end
 
       # Determine if male and female by comparing posteriors
-      def classify( male_text, female_text )
-          @male_posterior_numerator > @female_posterior_numerator ? male_text : female_text
+      def classify( male_text, female_text, male_posterior_numerator, female_posterior_numerator )
+          male_posterior_numerator > female_posterior_numerator ? male_text : female_text
       end
 
 

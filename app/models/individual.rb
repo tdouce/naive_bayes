@@ -7,13 +7,26 @@ class Individual < ActiveRecord::Base
   MALE    = 'Male'
   FEMALE  = 'Female'
 
-  # Is the dynamic scope below better?
-  #scope :males,   Individual.where(:gender => Individual::MALE)
-  #scope :females, Individual.where(:gender => Individual::FEMALE)
+  scope :trained?, Individual.where( :trained => false )
 
   # Get all individuals according to a specific gender
   def self.gender( gender )
     Individual.where( :gender => gender )
+  end
+
+  def set_trained_status_false
+    self.update_attributes( :trained => false )
+  end
+
+  def set_trained_status_true
+    self.update_attributes( :trained => true )
+  end
+
+  def self.to_trained( not_trained_individuals )
+
+    # Does this belong in controller?
+    not_trained_individuals.all.each {|indiv| indiv.set_trained_status_true }
+
   end
 
   #def self.get_attributes_per_gender( per_gender, attributes )
@@ -25,4 +38,6 @@ class Individual < ActiveRecord::Base
   FEMALEPROB = 0.5
 
   GENDERS = [ MALE, FEMALE ]
+
+
 end

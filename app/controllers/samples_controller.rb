@@ -12,8 +12,6 @@ class SamplesController < ApplicationController
     @sample_data = @sample.prepare_sample 
 
     if @sample.save
-      # Add when doing ajax
-      #respond_with(@sample)
       respond_to do |format|
         format.html { redirect_to new_sample_url }
         format.js
