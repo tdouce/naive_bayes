@@ -42,8 +42,9 @@ class Sample < ActiveRecord::Base
       # If there are individuals with :trained => false
       if not_trained_individuals.size > 0
 
-        train( prepare_data( FORMATTRIBUTES ) )
-        male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB )
+        prepped_data = prepare_data( FORMATTRIBUTES )
+        means_variances = train( prepped_data )
+        male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior_result, female_posterior_result )
 
         # Sets all individuals with :trained => false to true
@@ -52,15 +53,16 @@ class Sample < ActiveRecord::Base
 
         # Saves posterior results to database
         # Does this belong in controller?
-        Posterior.set_posterior( male_posterior_result, female_posterior_result, result )
+        # Posterior.set_posterior( means_variances )
         
         result
 
       # All individuals trained status is true, we can get the gender from the
       # last Posterior that was saved
       else
-        probability = Posterior.last
-        result = probability.gender
+        #probability = Posterior.last
+        #result = probability.gender
+        'get from posterior table'
       end
 
     # If there is not training data, then tell user so and do not run
@@ -111,10 +113,16 @@ class Sample < ActiveRecord::Base
       def train( training_data )
 
           # Get arrays containing means and variances
-          @male_means, @male_variances = batch_train( training_data[ Individual::MALE ] )
+          male_means, male_variances = batch_train( training_data[ Individual::MALE ] )
 
           ## Get arrays containing means and variances
-          @female_means, @female_variances = batch_train( training_data[ Individual::FEMALE ] )
+          female_means, female_variances = batch_train( training_data[ Individual::FEMALE ] )
+
+          data = {}
+          data['male'] = [ male_means, male_variances ]
+          data['female'] = [ female_means, female_variances ]
+
+          return data 
       end
 
       # Generates posterior
@@ -137,15 +145,19 @@ class Sample < ActiveRecord::Base
       end
       
       # Generate posterior for male and female
-      def get_posteriors( sample, male_probability, female_probability )
+      def get_posteriors( sample, male_probability, female_probability, means_variances )
           
+          puts '*'*80
+          puts means_variances
+          puts '*'*80
+            
           # Get posterior for male classification
-          @male_posterior_numerator = get_posterior_for_gender( male_probability, @male_variances, @male_means, sample )
+          male_posterior_numerator = get_posterior_for_gender( male_probability, means_variances['male'][1], means_variances['male'][0], sample )
 
           # Get posterior for female classification
-          @female_posterior_numerator = get_posterior_for_gender( female_probability, @female_variances, @female_means, sample )
+          female_posterior_numerator = get_posterior_for_gender( female_probability, means_variances['female'][1], means_variances['female'][0], sample )
 
-          return @male_posterior_numerator, @female_posterior_numerator
+          return male_posterior_numerator, female_posterior_numerator
       end
 
       # Generates probability for each combination (i.e. p(height|male), etc )
