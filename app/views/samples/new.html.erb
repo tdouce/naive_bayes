@@ -2,12 +2,7 @@
 <%= form_for @sample, :remote => true do |f| %>
 
   <div>
-    <%= f.label       "Weight" %>
-    <%= f.text_field  :weight %>  <br />
-    <%= f.label       "Height" %>
-    <%= f.text_field  :height %>  <br />
-    <%= f.label       "Foot Size" %>
-    <%= f.text_field  :foot_size %>  <br />
+    <%= render 'shared/forminputs', :object => f %>
   </div>
 
   <%= f.submit "Test Sample", :id => 'submit_sample' %>
