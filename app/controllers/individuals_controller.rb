@@ -11,9 +11,6 @@ class IndividualsController < ApplicationController
   def create
     @individual = Individual.new(params[:individual])
 
-    # Put default value to false in database
-    @individual.set_trained_status_false
-
     if @individual.save
       flash[:success] = "Individual was created!"
       redirect_to individuals_url
@@ -29,6 +26,7 @@ class IndividualsController < ApplicationController
 
   def update
     @individual = Individual.find(params[:id])
+
     # User call_back before_save
     @individual.set_trained_status_false
 
