@@ -1,9 +1,9 @@
 
-#require naive_bayes_classifier
-#include NaiveBayesClassifier 
-#require NaiveBayesClassifier 
+require 'naive_bayes_classifier'
 
 class Sample < ActiveRecord::Base
+
+  include NaiveBayesClassifier
 
   # Determine gender of a sample by using the Naive Bayes Classifier
 
@@ -39,11 +39,11 @@ class Sample < ActiveRecord::Base
     if Individual.all.size > 1 
 
       # not_trained_individuals = Individual.untrained
-      not_trained_individuals = Individual.trained?
+      not_trained_individuals = Individual.untrained
 
-      # User not_trained.count == 0 instead
-      if not_trained_individuals.size > 0
+      if not_trained_individuals.count > 0
 
+        #a = NaiveBayesClassifier.new
         prepped_data = prepare_data( FORMATTRIBUTES )
         means_variances = train( prepped_data )
         male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
@@ -54,34 +54,30 @@ class Sample < ActiveRecord::Base
         # Update all method
         Individual.to_trained( not_trained_individuals )
 
-        # Saves posterior results to database
-        # Does this belong in controller?
-        # Call directly
-        #Posterior.set_posterior( means_variances )
-        a = Posterior.new
-        a.set_poor_man_memcache( means_variances )
-        #puts '*'*80
-        #puts a.poor_man_memcache
-        #puts '*'*80
+        #not_trained_individuals.all.each {|indiv| indiv.set_trained_status_true }
 
-        #post = Posterior.new
         #debugger
+
+        puts '*'*80
+        puts 'here'
+        puts means_variances
+        puts '*'*80
+
+        Posterior.posterior_for_next_request( means_variances )
+
         result
+
 
       # All individuals trained status is true, we can get the gender from the
       # last Posterior that was saved
       else
 
-        b = Posterior.new
-        means_variances = b.get_poor_man_memcache
+        b = Posterior.last
+        means_variances = b.stats 
 
-        #means_variances = Posterior.last.stats
-        #means_variances = post.poor_man_memcache
-
-        debugger
-        
         male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior_result, female_posterior_result )
+        #'get previously trained data'
 
       end
 
@@ -167,9 +163,9 @@ class Sample < ActiveRecord::Base
       # Generate posterior for male and female
       def get_posteriors( sample, male_probability, female_probability, means_variances )
           
-          puts '*'*80
-          puts means_variances
-          puts '*'*80
+          #puts '*'*80
+          #puts means_variances
+          #puts '*'*80
             
           # Get posterior for male classification
           male_posterior_numerator = get_posterior_for_gender( male_probability, means_variances['male'][1], means_variances['male'][0], sample )

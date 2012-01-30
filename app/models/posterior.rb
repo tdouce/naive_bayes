@@ -1,25 +1,12 @@
 class Posterior < ActiveRecord::Base
-  attr_accessor :poor_man_memcache
-  #attr_accessible :poor_man_memcache
-  
-  #serialize :stats
+  serialize :stats
 
-  #def self.set_posterior( means_variances )
-  #  test = Posterior.create( :stats => means_variances )
-  #end
-  @@poor_man_memcache = nil 
-
-  def set_poor_man_memcache( hash )
-    @poor_man_memcache = hash
+  def self.posterior_for_next_request( means_variances )
+    if Posterior.count == 0
+      Posterior.create( :stats => means_variances )
+    else
+      Posterior.last.destroy
+      Posterior.create( :stats => means_variances )
+    end
   end
-
-  def get_poor_man_memcache
-    @@poor_man_memcache
-  end
-
-  
-  #def initialize
-  #  @poor_man_memcache = nil 
-  #end
-
 end

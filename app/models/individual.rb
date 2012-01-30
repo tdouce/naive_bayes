@@ -9,7 +9,7 @@ class Individual < ActiveRecord::Base
 
   # user
   # scope :untrained, where( :trained => false )
-  scope :trained?, Individual.where( :trained => false )
+  scope :untrained, Individual.where( :trained => false )
 
   # Get all individuals according to a specific gender
   def self.gender( gender )
