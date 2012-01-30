@@ -7,14 +7,22 @@ class Individual < ActiveRecord::Base
   MALE    = 'Male'
   FEMALE  = 'Female'
 
+  MALEPROB   = 0.5
+  FEMALEPROB = 0.5
+
+  GENDERS = [ MALE, FEMALE ]
+
+
   # user
   # scope :untrained, where( :trained => false )
   scope :untrained, Individual.where( :trained => false )
 
-  # Get all individuals according to a specific gender
-  def self.gender( gender )
-    Individual.where( :gender => gender )
-  end
+  scope :gender, lambda { |gender| where("gender = ?", gender ) }
+
+  ## Get all individuals according to a specific gender
+  #def self.gender( gender )
+  #  Individual.where( :gender => gender )
+  #end
 
   def set_trained_status_false
     self.update_attributes( :trained => false )
@@ -36,10 +44,11 @@ class Individual < ActiveRecord::Base
   #  where(:gender => per_gender)
   #end
 
-  MALEPROB   = 0.5
-  FEMALEPROB = 0.5
+    #private
 
-  GENDERS = [ MALE, FEMALE ]
+  #def set_trained_status_false
+  #  self.update_attributes( :trained => false )
+  #end
 
 
 end

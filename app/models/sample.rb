@@ -36,7 +36,7 @@ class Sample < ActiveRecord::Base
   def run_sample( sample_data )
 
     # Run sample only if there is training data
-    if Individual.all.size > 1 
+    if Individual.all.count != 0 
 
       # not_trained_individuals = Individual.untrained
       not_trained_individuals = Individual.untrained
