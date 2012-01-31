@@ -1,10 +1,5 @@
 class Individual < ActiveRecord::Base
 
-  #attr_writer :train
-  #attr_accessor :trained
-  #attr_accessible :trained
-  #attr_protected :trained
-
   #after_update :untrain
   before_update :untrain
 
