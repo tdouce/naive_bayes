@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120130194720) do
+ActiveRecord::Schema.define(:version => 20120131012516) do
 
   create_table "individuals", :force => true do |t|
     t.string   "gender"
@@ -30,7 +30,6 @@ ActiveRecord::Schema.define(:version => 20120130194720) do
   end
 
   create_table "samples", :force => true do |t|
-    t.string   "gender"
     t.float    "weight"
     t.float    "height"
     t.datetime "created_at"
