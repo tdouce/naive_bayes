@@ -1,6 +1,12 @@
 class Individual < ActiveRecord::Base
 
-  after_update :untrain
+  #attr_writer :train
+  #attr_accessor :trained
+  #attr_accessible :trained
+  #attr_protected :trained
+
+  #after_update :untrain
+  before_update :untrain
 
   validates :height, :presence => true, :numericality => true
   validates :weight, :presence => true, :numericality => true
@@ -20,6 +26,7 @@ class Individual < ActiveRecord::Base
   private
 
   def untrain 
-    self.trained = false
+    #self.update_attributes( :trained => false )
+    self.trained = :false
   end
 end
