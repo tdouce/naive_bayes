@@ -3,7 +3,7 @@
   <%= render 'shared/errormessages', :object => f.object %>
 
   <div>
-    <%= f.label       "Gender" %>
+    <%= f.label "Gender" %>
     <%= f.collection_select :gender, Individual::GENDERS, :to_s, :titleize %> <br />
     <%= render 'shared/forminputs', :object => f %>
   </div>
