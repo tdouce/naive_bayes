@@ -1,9 +1,6 @@
-Rails (rails 3.1.1 and ruby 1.9.2) app implementation of the Naive Bayes Classier as described at
-http://en.wikipedia.org/wiki/Naive_Bayes_classifier. 
+Rails (rails 3.1.1 and ruby 1.9.2) app implementation of the Naive Bayes Classier as described at http://en.wikipedia.org/wiki/Naive_Bayes_classifier. 
 
-Run 'rake db:seed' to load the training data that is on the wikipedia page (see above) so you can 
-easily test that the algorithm in the rails app generates the same values presented on the wikipedia
-page.
+Run 'rake db:seed' to load the training data that is on the wikipedia page (see above) so you can easily test that the algorithm in the rails app generates the same values presented on the wikipedia page.
 
 How it works from users' standpoint:
     1. Enter training data through form, link "Add Training Data"
@@ -13,25 +10,11 @@ How it works from users' standpoint:
 
 Notable techniques and approaches implemented in application:
     1. Use of ajax to respond with classification when a sample is submitted.
-    2. All training data statuses are initially set to false (the database default value for 'trained'
-       is false). When the first sample is run, all records in the individuals table (training data) 
-       are used to calculate the means and variances for the training data. This value
-       ( means and variances ) is stored in the posteriors table and all records in the individuals
-       table 'trained' status is set to true.  The next time a sample is run, the 
-       individuals table is queryed to see if there are any records with a 'trained' status as false.  
-       If there no records with a 'trained' status as false, then we know that there have been no 
-       additions to the training data and that no individual record has been edited (if a record in 
-       the individuals table is edited then the trained status is set to false for that record), so 
-       we query the posteriors table to get the previous stored means and variances ( i.e. the means 
-       and variances for the current set of training data), thus saving a possibly intensive computation. 
-       If a sample is run and any record in the individuals table has a 'trained' status of false, then 
-       all the records in the individuals table are used to calcualte the means and variances, and the 
-       'trained' false statuses are set to 'true'.
+    2. All training data statuses are initially set to false (the database default value for 'trained' is false). When the first sample is run, all records in the individuals table (training data) are used to calculate the means and variances for the training data. This value ( means and variances ) is stored in the posteriors table and all records in the individuals table 'trained' status is set to true.  The next time a sample is run, the individuals table is queryed to see if there are any records with a 'trained' status as false.  If there no records with a 'trained' status as false, then we know that there have been no additions to the training data and that no individual record has been edited (if a record in the individuals table is edited then the trained status is set to false for that record), so we query the posteriors table to get the previous stored means and variances ( i.e. the means and variances for the current set of training data), thus saving a possibly intensive computation.  If a sample is run and any record in the individuals table has a 'trained' status of false, then all the records in the individuals table are used to calcualte the means and variances, and the 'trained' false statuses are set to 'true'.
     3. The naive bayes classifier code is stored in a module.
     4. Callbacks
     5. Scopes
     6. Serialization
-    7. Use of javascript (JQuery and underscore.js) for 'extreme' value inputs (i.e. if a user inputs a weight
-       of 2000, then ask then if this value is correct before submission)
+    7. Use of javascript (JQuery and underscore.js) for 'extreme' value inputs (i.e. if a user inputs a weight of 2000, then ask then if this value is correct before submission)
     8. Extends array class.  Adds sum, mean, variance
     9. Tiny bit of css for navigation
