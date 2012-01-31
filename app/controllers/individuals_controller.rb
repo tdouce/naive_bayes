@@ -27,8 +27,8 @@ class IndividualsController < ApplicationController
   def update
     @individual = Individual.find(params[:id])
 
-    # When I tried to implement this as a callback I kept getting 'SystemStackError (stack level too deep)'
-    @individual.untrain
+    # Not sure how to integrate this into a callback
+    #@individual.untrain
 
     if @individual.update_attributes(params[:individual])
       flash[:success] = "Individual was updated"
