@@ -47,19 +47,18 @@ class Sample < ActiveRecord::Base
         # Determine classification
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior, female_posterior )
 
-        # Set trained status to true for every individual that previously had a trained status as false
+        # Set trained status to true for every individual that previously had a false trained status
         untrained_individuals.update_all( :trained => true )
 
         # Store the means and variances for the trained data in the posteriors table so if another request is make and 
-        # there have been no additions or updates to the training data, then we can query the means and variances from
-        # this request
+        # there have been no additions or updates to the training data, then we can query the means and variances from this request
         Posterior.posterior_for_next_request( means_variances )
 
         result
 
       # If all individuals trained status is true, then we do not need to
       # re-train the data to get the means and variances, we can query the
-      # the Posterior table and get the previously calculated means and variances
+      # the posteriors table and get the previously calculated means and variances
       else
 
         previously_trained = Posterior.last
@@ -70,7 +69,6 @@ class Sample < ActiveRecord::Base
 
         # Determine classification
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior, female_posterior )
-
       end
 
     # If there is no training data, then tell user so and do not run a calculation
