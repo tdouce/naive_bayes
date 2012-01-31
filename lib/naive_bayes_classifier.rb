@@ -42,9 +42,6 @@ module NaiveBayesClassifier
       # Add gender probability
       probs << gender_probability
       
-      puts 'probs: '
-      puts probs
-
       # Generate product of array 
       probs.inject(){|product, element| product * element}
   end
