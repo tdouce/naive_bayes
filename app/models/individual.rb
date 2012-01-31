@@ -1,6 +1,5 @@
 class Individual < ActiveRecord::Base
 
-  #after_update :untrain
   before_update :untrain
 
   validates :height, :presence => true, :numericality => true
@@ -21,7 +20,6 @@ class Individual < ActiveRecord::Base
   private
 
   def untrain 
-    #self.update_attributes( :trained => false )
     self.trained = :false
   end
 end

@@ -27,9 +27,6 @@ class IndividualsController < ApplicationController
   def update
     @individual = Individual.find(params[:id])
 
-    # Not sure how to integrate this into a callback
-    #@individual.untrain
-
     if @individual.update_attributes(params[:individual])
       flash[:success] = "Individual was updated"
       redirect_to individuals_url
