@@ -1,11 +1,9 @@
 
-require 'naive_bayes_classifier'
+#require 'naive_bayes_classifier'
 
 class Sample < ActiveRecord::Base
 
   include NaiveBayesClassifier
-
-  # Determine gender of a sample by using the Naive Bayes Classifier
 
   validates :weight,    :presence => true, :numericality => true
   validates :height,    :presence => true, :numericality => true
@@ -19,89 +17,87 @@ class Sample < ActiveRecord::Base
     sample_result = FORMATTRIBUTES.inject([]) { |result,attr| result << self.send( attr ) }
   end
 
-  def set_trained_status
-    self.update_attributes( :trained => false )
-  end
 
-  # Run the sample from the sample#new.html.erb. If there is no training data
-  # then do not run and instead return text notifing user. If there is data and
-  # at least one individual has :trained => false, then train the data and
-  # calcuate the posteriors for each class( male and female). Save means and 
-  # variances for each gender to database and set all
-  # invidividuals :trained => true. If the individuals size is greater than one
-  # and all individuals :trained => true, then we know that no individuals have
-  # been added to training data so we can use the last male and female means and
-  # variances in the database.  This saves us from having to calculate to train
-  # the data for each request, and only training the data when neccessary. 
+  # If there is no training data then do not run any calculation and instead return 
+  # text notifing user. If there is data and at least one individual has :trained => false, 
+  # then train the data and calcuate the posteriors for each classification( male and female). 
+  # Then set all indivuduals trained status to true and save the means and
+  # variances in the posteriors table.  If there is training data and there have
+  # been no additions or edits to individuals table ( trained status is false by default
+  # for new and is set to false if an individual was edited ), then retreive
+  # means and variances from previous request.
   def run_sample( sample_data )
+
+    #a = testing
+
+    #debugger
+    
 
     # Run sample only if there is training data
     if Individual.all.count != 0 
 
-      # not_trained_individuals = Individual.untrained
-      not_trained_individuals = Individual.untrained
+      untrained_individuals = Individual.untrained
 
-      if not_trained_individuals.count > 0
+      # Run sample only if there are untrained individuals
+      if untrained_individuals.count > 0
 
-        #a = NaiveBayesClassifier.new
+        # Query database, get male and female data and package in hash
         prepped_data = prepare_data( FORMATTRIBUTES )
+
+        # Generate the means and variances per gender
         means_variances = train( prepped_data )
-        male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
+
+        # Generate the posterior numerators per gender
+        male_posterior_result, female_posterior_result = posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
+
+        # Determine classification
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior_result, female_posterior_result )
 
-        # Sets all individuals with :trained => false to true
-        # Does this belong in controller?
-        # Update all method
-        Individual.to_trained( not_trained_individuals )
+        # Set trained status to true for every individual that previously had a trained status as false
+        untrained_individuals.update_all( :trained => true )
 
-        #not_trained_individuals.all.each {|indiv| indiv.set_trained_status_true }
-
-        #debugger
-
-        puts '*'*80
-        puts 'here'
-        puts means_variances
-        puts '*'*80
-
+        # Store the means and variances for the trained data in the posteriors table so if another request is make and 
+        # there have been no additions or updates to the training data, then we can query the means and variances from
+        # this request
         Posterior.posterior_for_next_request( means_variances )
 
         result
 
-
-      # All individuals trained status is true, we can get the gender from the
-      # last Posterior that was saved
+      # If all individuals trained status is true, then we do not need to
+      # re-train the data to get the means and variances, we can query the
+      # the Posterior table and get the previously calculated means and variances
       else
 
-        b = Posterior.last
-        means_variances = b.stats 
+        previously_trained = Posterior.last
+        means_variances = previously_trained.stats 
 
-        male_posterior_result, female_posterior_result = get_posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
+        # Generate posterior numerators per gender
+        male_posterior_result, female_posterior_result = posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
+
+        # Determine classification
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior_result, female_posterior_result )
-        #'get previously trained data'
 
       end
 
-    # If there is not training data, then tell user so and do not run
-    # a calculation
+    # If there is no training data, then tell user so and do not run a calculation
     else
       'There is no training data'
     end
-
   end
 
   private
 
-    # Querys database for each gender according to the attributes and packages it up so 
-    # that it can be sent to NaiveBayes classifer
-    def prepare_data( attributes )
+      # Querys database for each gender according to the attributes and packages it up in a hash so 
+      # that it can be sent to NaiveBayes classifer
+      def prepare_data( attributes )
 
       training_data = Individual::GENDERS.inject({}) do |hash,gender| 
-        #data = []
-        #attributes.each do |attr|
+
         data = attributes.inject([]) do |result, attr|
             result << Individual.gender( gender ).map( &attr )
             result
         end
+
         hash[ gender ] = data
         hash
       end
@@ -109,8 +105,7 @@ class Sample < ActiveRecord::Base
       return training_data 
       end
 
-      # Generates means and variances. Accepts nested arrays of data. 
-      # Returns an array of the means and an array of the variances
+      # Generates means and variances
       def batch_train( data )
           means = []
           variances = []
@@ -125,24 +120,20 @@ class Sample < ActiveRecord::Base
           return means, variances
       end
 
-      #Train data, get posterior for male and female, and compare results to determine gender 
+      # Train data, get posterior for male and female, and compare results to determine gender 
       def train( training_data )
 
-          # Get arrays containing means and variances
-          male_means, male_variances = batch_train( training_data[ Individual::MALE ] )
-
-          ## Get arrays containing means and variances
-          female_means, female_variances = batch_train( training_data[ Individual::FEMALE ] )
-
-          data = {}
-          data['male'] = [ male_means, male_variances ]
-          data['female'] = [ female_means, female_variances ]
+          data = Individual::GENDERS.inject({}) do |hash,gender|
+            means, variances = batch_train( training_data[ gender ] )
+            hash[ gender ] = [ means, variances ]
+            hash
+          end
 
           return data 
       end
 
-      # Generates posterior
-      def get_posterior_for_gender( gender_probability, variances, means, sample )
+      # Generate posterior
+      def posterior_for_gender( gender_probability, variances, means, sample )
 
           # Make and array for all probabilities
           probs = 1.upto( sample.size ).each_with_index.inject([]) do |probs, (attr, index)|
@@ -156,22 +147,15 @@ class Sample < ActiveRecord::Base
           puts 'probs: '
           puts probs
 
-          # Multiply all elements in array together
+          # Generate product of array 
           probs.inject(){|product, element| product * element}
       end
       
-      # Generate posterior for male and female
-      def get_posteriors( sample, male_probability, female_probability, means_variances )
+      # Generate posterior per gender
+      def posteriors( sample, male_probability, female_probability, means_variances )
           
-          #puts '*'*80
-          #puts means_variances
-          #puts '*'*80
-            
-          # Get posterior for male classification
-          male_posterior_numerator = get_posterior_for_gender( male_probability, means_variances['male'][1], means_variances['male'][0], sample )
-
-          # Get posterior for female classification
-          female_posterior_numerator = get_posterior_for_gender( female_probability, means_variances['female'][1], means_variances['female'][0], sample )
+          male_posterior_numerator   = posterior_for_gender( male_probability, means_variances[Individual::MALE][1], means_variances[Individual::MALE][0], sample )
+          female_posterior_numerator = posterior_for_gender( female_probability, means_variances[Individual::FEMALE][1], means_variances[Individual::FEMALE][0], sample )
 
           return male_posterior_numerator, female_posterior_numerator
       end
@@ -183,10 +167,8 @@ class Sample < ActiveRecord::Base
           probability = male_numerator * Math.exp( male_exponent ) 
       end
 
-      # Determine if male and female by comparing posteriors
+      # Determine gender by comparing posteriors
       def classify( male_text, female_text, male_posterior_numerator, female_posterior_numerator )
           male_posterior_numerator > female_posterior_numerator ? male_text : female_text
       end
-
-
 end
