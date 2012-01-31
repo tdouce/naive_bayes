@@ -1,12 +1,10 @@
 class SamplesController < ApplicationController
   
-  # Add when doing ajax
-  #respond_to :html, :js
-
   def new
     @sample = Sample.new
   end
 
+  # Use ajax to respond with answer
   def create
     @sample = Sample.new(params[:sample])
     @sample_data = @sample.prepare_sample 
