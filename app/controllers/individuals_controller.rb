@@ -27,8 +27,8 @@ class IndividualsController < ApplicationController
   def update
     @individual = Individual.find(params[:id])
 
-    # User call_back before_save. Getting SystemStackError (stack level too deep):
-    @individual.set_trained_status_false
+    # When I tried to implement this as a callback I kept getting 'SystemStackError (stack level too deep)'
+    @individual.untrain
 
     if @individual.update_attributes(params[:individual])
       flash[:success] = "Individual was updated"
