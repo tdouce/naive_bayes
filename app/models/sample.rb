@@ -42,7 +42,13 @@ class Sample < ActiveRecord::Base
         means_variances = train( Individual::GENDERS, prepped_data )
 
         # Generate the posterior numerators per gender
-        male_posterior, female_posterior = posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
+        male_posterior, female_posterior = posteriors( sample_data, 
+                                                       Individual::MALEPROB, 
+                                                       Individual::FEMALEPROB, 
+                                                       means_variances, 
+                                                       Individual::MALE, 
+                                                       Individual::FEMALE
+                                                     )
 
         # Determine classification
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior, female_posterior )
@@ -64,8 +70,15 @@ class Sample < ActiveRecord::Base
         previously_trained = Posterior.last
         means_variances = previously_trained.stats 
 
-        # Generate posterior numerators per gender
-        male_posterior, female_posterior = posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
+        # Generate the posterior numerators per gender
+        male_posterior, female_posterior = posteriors( sample_data, 
+                                                       Individual::MALEPROB, 
+                                                       Individual::FEMALEPROB, 
+                                                       means_variances, 
+                                                       Individual::MALE, 
+                                                       Individual::FEMALE
+                                                     )
+
 
         # Determine classification
         result = classify( Individual::MALE, Individual::FEMALE, male_posterior, female_posterior )

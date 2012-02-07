@@ -47,10 +47,10 @@ module NaiveBayesClassifier
   end
   
   # Generate posterior per gender
-  def posteriors( sample, male_probability, female_probability, means_variances )
+  def posteriors( sample, male_probability, female_probability, means_variances, male_key, female_key )
       
-      male_posterior_numerator   = posterior_for_gender( male_probability, means_variances[Individual::MALE][1], means_variances[Individual::MALE][0], sample )
-      female_posterior_numerator = posterior_for_gender( female_probability, means_variances[Individual::FEMALE][1], means_variances[Individual::FEMALE][0], sample )
+      male_posterior_numerator   = posterior_for_gender( male_probability, means_variances[male_key][1], means_variances[male_key][0], sample )
+      female_posterior_numerator = posterior_for_gender( female_probability, means_variances[female_key][1], means_variances[female_key][0], sample )
 
       return male_posterior_numerator, female_posterior_numerator
   end
