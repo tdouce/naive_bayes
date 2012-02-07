@@ -19,9 +19,9 @@ module NaiveBayesClassifier
   end
 
   # Train data, get posterior for male and female, and compare results to determine gender 
-  def train( training_data )
+  def train( genders, training_data )
 
-      data = Individual::GENDERS.inject({}) do |hash,gender|
+      data = genders.inject({}) do |hash,gender|
         means, variances = batch_train( training_data[ gender ] )
         hash[ gender ] = [ means, variances ]
         hash

@@ -39,7 +39,7 @@ class Sample < ActiveRecord::Base
         prepped_data = prepare_data( FORMATTRIBUTES )
 
         # Generate the means and variances per gender
-        means_variances = train( prepped_data )
+        means_variances = train( Individual::GENDERS, prepped_data )
 
         # Generate the posterior numerators per gender
         male_posterior, female_posterior = posteriors( sample_data, Individual::MALEPROB, Individual::FEMALEPROB, means_variances )
