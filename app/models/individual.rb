@@ -1,5 +1,7 @@
 class Individual < ActiveRecord::Base
 
+  include NaiveBayesClassifier
+
   before_update :untrain
   before_save   :height_to_decimal_inches
 
@@ -24,10 +26,4 @@ class Individual < ActiveRecord::Base
   def untrain 
     self.trained = :false
   end
-
-  def height_to_decimal_inches
-      self.height_in = 0 if self.height_in.blank?
-      self.height = Float( self.height_ft ) + ( Float( self.height_in )/12 )
-  end
-
 end

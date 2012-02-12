@@ -2,6 +2,12 @@
 # Based on the Naive Bayes Classier equation found at http://en.wikipedia.org/wiki/Naive_Bayes_classifier
 module NaiveBayesClassifier 
 
+  def height_to_decimal_inches
+    self.height_in = 0 if self.height_in.blank?
+    self.height = Float( self.height_ft ) + ( Float( self.height_in )/12 )
+  end
+
+
   # Generates means and variances
   def batch_train( data )
 
