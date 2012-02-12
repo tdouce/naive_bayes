@@ -7,9 +7,12 @@ class SamplesController < ApplicationController
   # Use ajax to respond with answer
   def create
     @sample = Sample.new(params[:sample])
-    @sample_data = @sample.prepare_sample 
+    #@sample_data = @sample.prepare_sample 
 
     if @sample.save
+
+      @sample_data = @sample.prepare_sample 
+
       respond_to do |format|
         format.html { redirect_to new_sample_url }
         format.js

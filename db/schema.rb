@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120131012516) do
+ActiveRecord::Schema.define(:version => 20120212191945) do
 
   create_table "individuals", :force => true do |t|
     t.string   "gender"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(:version => 20120131012516) do
     t.datetime "updated_at"
     t.float    "foot_size"
     t.boolean  "trained",    :default => false
+    t.integer  "height_in"
+    t.integer  "height_ft"
   end
 
   create_table "posteriors", :force => true do |t|
@@ -35,6 +37,8 @@ ActiveRecord::Schema.define(:version => 20120131012516) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "foot_size"
+    t.integer  "height_in"
+    t.integer  "height_ft"
   end
 
 end

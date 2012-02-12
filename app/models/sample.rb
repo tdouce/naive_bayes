@@ -2,9 +2,12 @@
 class Sample < ActiveRecord::Base
 
   include NaiveBayesClassifier
+  
+  before_save :height_to_decimal_inches
 
   validates :weight,    :presence => true, :numericality => true
-  validates :height,    :presence => true, :numericality => true
+  validates :height_ft, :numericality => { :only_integer => true, :less_than_or_equal_to => 7 }
+  validates :height_in, :numericality => { :less_than_or_equal_to => 11 }
   validates :foot_size, :presence => true, :numericality => true
 
   # Attributes that we are included in naive bayes classier
@@ -109,4 +112,10 @@ class Sample < ActiveRecord::Base
 
       return training_data 
     end
+
+    def height_to_decimal_inches
+      self.height_in = 0 if self.height_in.blank?
+      self.height = Float( self.height_ft ) + ( Float( self.height_in )/12 )
+    end
+
 end

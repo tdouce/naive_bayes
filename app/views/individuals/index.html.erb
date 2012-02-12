@@ -12,8 +12,8 @@
   <% @individuals.each do |indiv| %>
   <tr>
       <td> <%= indiv.gender %> </td>
-      <td> <%= indiv.weight %> </td>
-      <td> <%= indiv.height %> </td>
+      <td> <%= indiv.weight.to_i %> </td>
+      <td> <%= indiv.height_ft %>' <%= indiv.height_in %>"</td>
       <td> <%= indiv.foot_size %> </td>
       <td> <%= button_to "edit", edit_individual_url( indiv ), { :method => :get } %> </td>
       <td> <%= button_to "delete", individual_url( indiv ), :method => :delete, 

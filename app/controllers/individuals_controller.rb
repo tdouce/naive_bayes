@@ -41,5 +41,4 @@ class IndividualsController < ApplicationController
     flash[:success] = "Individual was deleted"
     redirect_to individuals_url
   end
-
 end
