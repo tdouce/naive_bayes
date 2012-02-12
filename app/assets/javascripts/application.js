@@ -16,13 +16,13 @@ $(function(){
 
     // Maximum and minimum weights used to generate warnings
     var weight_min    = 50;
-    var weight_max    = 300;
+    var weight_max    = 400;
     var height_ft_min = 4;
     var height_ft_max = 7;
     var height_in_min = 0;
     var height_in_max = 11;
     var foot_size_min = 4;
-    var foot_size_max = 14;
+    var foot_size_max = 17;
 
      // Used to check the input values on form submission to make sure that a user did not
      // accidently type in an 'extreme' value. [ input id, minimum value, maximum value ]
