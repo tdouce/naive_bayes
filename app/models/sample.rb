@@ -5,10 +5,9 @@ class Sample < ActiveRecord::Base
   
   before_save :height_to_decimal_inches
 
-  validates :gender,    :presence => true
   validates :weight,    :presence => true, :numericality => { :greater_than => 50, :less_than_or_equal_to => 400 }
   validates :height_ft, :numericality => { :only_integer => true, :less_than_or_equal_to => 7 }
-  validates :height_in, :numericality => { :less_than_or_equal_to => 11 }
+  validates :height_in, :numericality => { :less_than_or_equal_to => 11 }, :allow_blank => true
   validates :foot_size, :presence => true, :numericality => { :greater_than => 4, :less_than_or_equal_to => 17 }
 
   # Attributes that we are included in naive bayes classier
