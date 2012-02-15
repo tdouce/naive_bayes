@@ -4,6 +4,8 @@
 
   <div>
     <%= render 'shared/forminputs', :object => f %>
+    <%= f.label "Shoe size:" %>
+    <%= f.collection_select :foot_size, Individual.shoe_sizes, :to_s, :titleize %>
   </div>
 
   <%= f.submit "Test Sample", :id => 'submit_sample' %>

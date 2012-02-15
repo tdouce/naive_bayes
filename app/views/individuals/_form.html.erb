@@ -6,6 +6,8 @@
     <%= f.label "Gender" %>
     <%= f.collection_select :gender, Individual::GENDERS, :to_s, :titleize %> <br />
     <%= render 'shared/forminputs', :object => f %>
+    <%= f.label "Shoe size:" %>
+    <%= f.collection_select :foot_size, Individual.shoe_sizes, :to_s, :titleize, { :selected => @individual.format_for_dropdown }%>
   </div>
 
   <%= f.submit button_text, :id => 'submit_sample' %>

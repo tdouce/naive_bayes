@@ -22,6 +22,25 @@ class Individual < ActiveRecord::Base
   scope :untrained, Individual.where( :trained => false )
   scope :gender, lambda { |gender| where("gender = ?", gender ) }
 
+  # Generate shoe sizes for dropdown menu
+  def self.shoe_sizes
+    5.upto(17).inject([]) do |sizes,num|
+      sizes << num.to_s
+      sizes << (num + 0.5).to_s
+      sizes
+    end
+  end
+
+  # Format selected item in dropdown
+  def format_for_dropdown
+    foot_size_array = self.foot_size.to_s.split(".")
+    if foot_size_array.size > 1 and foot_size_array[1] == "0"
+      foot_size_array[0]
+    else
+      self.foot_size.to_s
+    end
+  end
+
   private
 
   def untrain 
