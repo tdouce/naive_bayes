@@ -36,8 +36,6 @@ class IndividualsController < ApplicationController
   end
 
   def destroy
-
-    @individual = Individual.find(params[:id])
     @individual.destroy
     flash[:success] = "Individual was deleted"
     redirect_to individuals_url
