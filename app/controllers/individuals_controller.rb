@@ -1,4 +1,6 @@
 class IndividualsController < ApplicationController
+  
+  before_filter :find_individual, :only => [:edit, :update, :destroy]
 
   def index
     @individuals = Individual.order("gender desc")
@@ -21,12 +23,9 @@ class IndividualsController < ApplicationController
   end
 
   def edit
-    @individual = Individual.find(params[:id])
   end
 
   def update
-    @individual = Individual.find(params[:id])
-
     if @individual.update_attributes(params[:individual])
       flash[:success] = "Individual was updated"
       redirect_to individuals_url
@@ -37,8 +36,16 @@ class IndividualsController < ApplicationController
   end
 
   def destroy
-    Individual.find(params[:id]).destroy
+
+    @individual = Individual.find(params[:id])
+    @individual.destroy
     flash[:success] = "Individual was deleted"
     redirect_to individuals_url
+  end
+
+  protected
+
+  def find_individual
+    @individual = Individual.find(params[:id])
   end
 end
